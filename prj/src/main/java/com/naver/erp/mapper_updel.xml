@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.erp.UpDelDAO">
+	
+	<update id="updateDeveloper" parameterType="com.naver.erp.UpDelDTO">
+		update
+			developer
+		set
+			developer_name = #{developer_name}
+			,jumin_no = #{sum_jumin_no}
+			,religion_code = ${religion_code}
+			,school_code = ${school_code}
+			,graduate_day = #{sum_graduate_day} 
+			
+		where
+			developer_no = ${developer_no}
+	
+	</update>
+	
+	<!-- ============================================================== -->
+	<delete id="deleteSkill" parameterType="com.naver.erp.UpDelDTO">
+		delete from developer_skill
+		where
+			developer_no = ${developer_no}
+		
+	</delete>
+	<!-- ============================================================== -->
+	<insert id="updateSkill" parameterType="com.naver.erp.UpDelDTO">
+		<!-- <foreach collection="skill_code" item="tmp"> -->
+		
+				insert into developer_skill(
+					developer_skill_no
+					,developer_no
+					,skill_code
+				)values(
+					(select nvl(max(developer_skill_no),0)+1 from developer_skill)
+					,${developer_no}
+					,${oneByOne_skill_code}
+				
+				)		
+						
+		<!-- </foreach> -->
+		
+		
+	</insert>
+	<delete id="deleteDeveloper" parameterType="com.naver.erp.UpDelDTO">
+		delete from developer
+		where
+			developer_no = ${developer_no}
+		
+	</delete>
+	
+	
+</mapper>
+
+
+
+
+

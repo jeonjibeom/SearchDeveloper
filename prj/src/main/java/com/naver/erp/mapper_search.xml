@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.erp.SearchDAO">
+	<select id="getDeveloperList" parameterType="com.naver.erp.SearchDTO" resultType="java.util.HashMap">
+		select * from (select rownum RNUM, zxcvb.* from(
+		select 
+			developer_no        
+		    ,developer_name     
+		    ,jumin_no       
+		    ,school_code   
+		    ,religion_name  as "RELIGION_NAME"
+		    ,graduate_day   
+		    ,case substr(jumin_no,7,1)
+			        when '1' then '남'
+			        when '2' then '여'
+			end as "sex"
+			
+			
+		 from developer d ,code_religion r
+			where
+				d.religion_code = r.religion_code
+				and
+				1=1
+				<!-- 키워드 -->
+				<if test="keyword!=null">
+				 	and
+				    developer_name like '%${keyword}%' 
+				</if>
+				<!-- 성별 -->
+				<if test="sex!=null">
+					<foreach collection="sex" item="tmp" open="and (" close=")" separator=" or ">
+						
+						substr(jumin_no,7,1)=#{tmp}
+					</foreach>
+				</if>
+				<!-- 학력 -->
+				<if test="school_name!=null">
+					<foreach collection="school_name" item="tmp" open="and (" close=")" separator=" or ">
+						
+						school_code=#{tmp}
+					</foreach>
+				</if>
+				<!-- 졸업일자 -->
+				<if test="first_day!=null">
+					and
+					to_number(graduate_day)>=to_number(#{first_day})
+				</if>
+				<if test="second_day!=null">
+					and
+					to_number(#{second_day})>=to_number(graduate_day)
+				</if>
+				<if test="religion_name!=null and religion_name.length()>0">
+					and
+					d.religion_code = #{religion_name}
+				</if>
+				
+				
+				<!-- =============================================================== -->
+				<!-- 여기부터는 기술 관련 문제 -->
+				<!-- =============================================================== -->
+
+				<if test="skill_name!=null">
+					<foreach collection="skill_name" item="tmp" open="and (" close=")" separator=" and ">
+						developer_no in (select developer_no from developer_skill where skill_code=${tmp})
+						
+					</foreach>
+					    
+				</if>
+				
+		<![CDATA[
+			)zxcvb )where RNUM >= #{begin_rowNo} and RNUM <= #{end_rowNo}
+		]]>			
+
+   </select>
+	<select id="getBoardCnt" parameterType="com.naver.erp.SearchDTO" resultType="int">
+		select 
+			count(*)
+			
+			
+		 from developer d ,code_religion r
+			where
+				d.religion_code = r.religion_code
+				and
+				1=1
+				<!-- 키워드 -->
+				<if test="keyword!=null">
+				 	and
+				    developer_name like '%${keyword}%' 
+				</if>
+				<!-- 성별 -->
+				<if test="sex!=null">
+					<foreach collection="sex" item="tmp" open="and (" close=")" separator=" or ">
+						
+						substr(jumin_no,7,1)=#{tmp}
+					</foreach>
+				</if>
+				<!-- 학력 -->
+				<if test="school_name!=null">
+					<foreach collection="school_name" item="tmp" open="and (" close=")" separator=" or ">
+						
+						school_code=#{tmp}
+					</foreach>
+				</if>
+				<!-- 졸업일자 -->
+				<if test="first_day!=null">
+					and
+					to_number(graduate_day)>=to_number(#{first_day})
+				</if>
+				<if test="second_day!=null">
+					and
+					to_number(#{second_day})>=to_number(graduate_day)
+				</if>
+				<if test="religion_name!=null and religion_name.length()>0">
+					and
+					d.religion_code = #{religion_name}
+				</if>
+				
+				
+				<!-- =============================================================== -->
+				<!-- 여기부터는 기술 관련 문제 -->
+				<!-- =============================================================== -->
+
+				<if test="skill_name!=null">
+					<foreach collection="skill_name" item="tmp" open="and (" close=")" separator=" and ">
+						developer_no in (select developer_no from developer_skill where skill_code=${tmp})
+						
+					</foreach>
+					    
+				</if>
+     
+
+   </select>  
+  
+
+	<select id="getSkillList" resultType="java.util.HashMap" >
+		select
+	
+		developer_name
+		,skill_name
+	
+		from developer d, developer_skill ds, code_skill cs
+		where
+			d.developer_no = ds.developer_no
+			and
+			ds.skill_code =	cs.skill_code 
+	</select>
+
+	<select id="getBoardListCntAll" resultType="int">
+		select count(*) from developer
+	</select>
+</mapper>
+
+
+
+
+

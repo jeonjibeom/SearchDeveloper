@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.erp.InputDAO">
+	<insert id="insertBoard" parameterType="com.naver.erp.InputDTO">
+		insert into developer(
+			developer_no
+			,developer_name
+			,jumin_no
+			,religion_code
+			,school_code
+			,graduate_day
+			
+		)values(
+			(select nvl(max(developer_no),0)+1 from developer)
+			,#{name}
+			,#{sum_jumin_no}
+			,#{religion_code}
+			,#{school_code} 
+			,#{sum_graduate_day}
+			
+		)
+		
+		
+	</insert>
+	<!-- 이제 스킬 코드 넣어야함. -->
+	<insert id="insertSkillBoard" parameterType="com.naver.erp.InputDTO">
+		<!-- <foreach collection="skill_code" item="tmp"> -->
+		
+				insert into developer_skill(
+					developer_skill_no
+					,developer_no
+					,skill_code
+				)values(
+					(select nvl(max(developer_skill_no),0)+1 from developer_skill)
+					,(select nvl(max(developer_no),0) from developer)
+					,${oneByOne_skill_code}
+				
+				)		
+						
+		<!-- </foreach> -->
+		
+		
+	</insert>
+</mapper>
+
+
+
+
+
