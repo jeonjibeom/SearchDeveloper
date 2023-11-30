@@ -64,7 +64,7 @@
 						developer_no in (select developer_no from developer_skill where skill_code=${tmp})
 						
 					</foreach>
-					    
+   
 				</if>
 				
 		<![CDATA[
@@ -131,6 +131,7 @@
 
    </select>  
   
+
 
 	<select id="getSkillList" resultType="java.util.HashMap" >
 		select

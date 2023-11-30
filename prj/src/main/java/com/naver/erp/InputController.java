@@ -35,7 +35,7 @@ public class InputController {
 //		System.out.println(inputDTO.getSkill_code());
 //		System.out.println(inputDTO.getGraduate_day());
 //		System.out.println("-----------------------------------------");
-//		
+//		df
 		
 		//주민번호 합치기
 		if(inputDTO.getJumin_no()!=null) {
