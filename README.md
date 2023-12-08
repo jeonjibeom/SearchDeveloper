@@ -69,4 +69,4 @@ insert into code_school(school_code,school_name) values( (select nvl(max(school_
 insert into code_school(school_code,school_name) values( (select nvl(max(school_code),0)+1 from code_school), '일반대졸' );
 ```
 
-# 본 프로젝트는 데이터 베이스 연습과 검색/수정/삭제/등록 연습에 포커스를 맞추어 제작한 프로그램입니다.
+# 본 프로젝트는 데이터 베이스 연습과 검색/수정/삭제/등록 연습에 그리고 페이징처리에 포커스를 맞추어 제작한 프로그램입니다.
